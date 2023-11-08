@@ -7,12 +7,17 @@ import br.com.api.capyba.models.records.LoginDTO;
 import br.com.api.capyba.models.records.LoginResponseDTO;
 import br.com.api.capyba.models.records.RegisterDTO;
 import br.com.api.capyba.repositories.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +52,15 @@ public class AuthenticationController {
 
         this.repository.save(newUser);
 
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity logoutAccount(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null){
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
         return ResponseEntity.ok().build();
     }
 }

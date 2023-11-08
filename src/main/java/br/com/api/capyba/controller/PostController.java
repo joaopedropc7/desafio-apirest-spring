@@ -40,8 +40,15 @@ public class PostController {
         postBlogService.deletePost(id);
     }
 
+    @PostMapping("/like/{id}")
+    public void likePost(@PathVariable(value = "id")Integer id){
+        postBlogService.likePost(id);
+    }
 
-
+    @PostMapping("/unlike/{id}")
+    public void unlikePost(@PathVariable(value = "id")Integer id){
+        postBlogService.unlikePost(id);
+    }
 
 
 }

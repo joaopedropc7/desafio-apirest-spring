@@ -45,5 +45,17 @@ public class BlogpotService {
         postRepository.delete(postDB);
     }
 
+    public void likePost(Integer id){
+        PostModel post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        post.setLikes(+1);
+        postRepository.save(post);
+    }
 
+    public void unlikePost(Integer id){
+        PostModel post = postRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
+        if(post.getLikes() != 0){
+            post.setLikes(-1);
+            postRepository.save(post);
+        }
+    }
 }

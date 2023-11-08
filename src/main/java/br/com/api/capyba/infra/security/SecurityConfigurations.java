@@ -31,7 +31,9 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "api/authentication/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/authentication/register").permitAll()
                         .anyRequest().access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.getVerifiedEmail"))
-                )
+                ).logout((logout) -> logout
+                        .logoutSuccessUrl("/api/authentication/logout")
+                        .permitAll())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
