@@ -58,4 +58,8 @@ public class BlogpotService {
             postRepository.save(post);
         }
     }
+
+    public List<PostModel> searchProducts(String query){
+        return postRepository.searchPosts(query);
+    }
 }

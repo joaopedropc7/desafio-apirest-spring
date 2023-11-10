@@ -18,6 +18,10 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
+    public void expireToken(String token){
+
+    }
+
     public String generateToken(UserModel user){
         try{
             Algorithm algorithm = Algorithm.HMAC256(secret);

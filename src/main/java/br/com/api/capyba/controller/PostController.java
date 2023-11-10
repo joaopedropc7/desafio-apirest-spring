@@ -4,6 +4,7 @@ import br.com.api.capyba.models.PostModel;
 import br.com.api.capyba.models.records.PostRecord;
 import br.com.api.capyba.service.BlogpotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -50,6 +51,9 @@ public class PostController {
         postBlogService.unlikePost(id);
     }
 
-
+    @GetMapping("/search")
+    public ResponseEntity<List<PostModel>> searchPosts(@RequestParam("query")String query){
+        return ResponseEntity.ok(postBlogService.searchProducts(query));
+    }
 
 }

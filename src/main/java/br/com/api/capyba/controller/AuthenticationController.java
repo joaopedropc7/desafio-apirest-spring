@@ -1,5 +1,6 @@
 package br.com.api.capyba.controller;
 
+import br.com.api.capyba.infra.security.SecurityFilter;
 import br.com.api.capyba.infra.security.TokenService;
 import br.com.api.capyba.models.UserModel;
 import br.com.api.capyba.models.enums.UserRole;
@@ -35,6 +36,9 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private SecurityFilter securityFilter;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
@@ -60,9 +64,12 @@ public class AuthenticationController {
     public ResponseEntity logoutAccount(HttpServletRequest request, HttpServletResponse response, Authentication authentication){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if(auth != null){
+            var credentials = auth.getCredentials();
+
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
         return ResponseEntity.ok().build();
+
     }
 
     @PostMapping("/verified/{id}")
@@ -70,4 +77,12 @@ public class AuthenticationController {
         authorizationService.verifiedAccount(id);
         return ResponseEntity.ok().build();
     }
+
+    public ResponseEntity<UserModel> updateAccount(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null){
+
+        }
+    }
+
 }
