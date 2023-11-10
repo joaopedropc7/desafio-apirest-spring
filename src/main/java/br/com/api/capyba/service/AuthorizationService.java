@@ -1,5 +1,7 @@
 package br.com.api.capyba.service;
 
+import br.com.api.capyba.exceptions.ResourceNotFoundException;
+import br.com.api.capyba.models.UserModel;
 import br.com.api.capyba.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,4 +20,10 @@ public class AuthorizationService implements UserDetailsService {
         return repository.findByLogin(username);
     }
 
+
+    public void verifiedAccount(Integer id){
+        UserModel user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setVerifiedEmail(true);
+        repository.save(user);
+    }
 }
