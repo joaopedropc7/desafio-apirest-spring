@@ -30,7 +30,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "api/authentication/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/authentication/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/authentication/verified/{id}").permitAll()
+                        .requestMatchers(HttpMethod.POST, "api/authentication/verified/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/email").permitAll()
                         .anyRequest().access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.getVerifiedEmail()"))
                 ).logout((logout) -> logout

@@ -8,9 +8,11 @@ import br.com.api.capyba.models.enums.UserRole;
 import br.com.api.capyba.models.records.LoginDTO;
 import br.com.api.capyba.models.records.LoginResponseDTO;
 import br.com.api.capyba.models.records.RegisterDTO;
+import br.com.api.capyba.models.records.TokenRecordDTO;
 import br.com.api.capyba.repositories.UserRepository;
 import br.com.api.capyba.service.AuthorizationService;
 import br.com.api.capyba.service.EmailService;
+import br.com.api.capyba.service.TokenVerifyService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.User;
@@ -40,9 +42,8 @@ public class AuthenticationController {
     private TokenService tokenService;
     @Autowired
     private EmailService emailService;
-
     @Autowired
-    private SecurityFilter securityFilter;
+    private TokenVerifyService tokenVerifyService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginDTO data){
@@ -62,17 +63,16 @@ public class AuthenticationController {
         if(this.repository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().build();
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
-
-
         UserModel newUser = new UserModel(data, encryptedPassword);
         this.repository.save(newUser);
+        Integer token =  tokenVerifyService.generateTokenVerified(newUser.getId());
         var recipient = data.email();
         var messageBody = "Olá, " + newUser.getLogin() + "! \n\n" +
-                "Seja bem-vindo(a) ao Capyba! \n\n" +
-                "Para confirmar seu cadastro, clique no link abaixo: \n\n" +
-                "http://localhost:8080/api/authentication/verified/" + newUser.getId() + "\n\n" +
+                "Seja bem-vindo(a) a Esphera! \n\n" +
+                "Para confirmar seu cadastro, insira este token: \n\n" +
+                token + "\n\n" +
                 "Atenciosamente, \n" +
-                "Equipe Capyba";
+                "Equipe Esphera";
         var subject = "Confirmação de cadastro";
         EmailModel emailModel = new EmailModel(recipient, messageBody, subject, null);
         emailService.sendEmail(emailModel);
@@ -92,10 +92,13 @@ public class AuthenticationController {
 
     }
 
-    @GetMapping("/verified/{id}")
-    public ResponseEntity verifiedEmail(@PathVariable(value = "id") Integer id){
-        authorizationService.verifiedAccount(id);
-        return ResponseEntity.ok().build().ok("Email verificado com sucesso!");
+   @PostMapping("/verified/{id}")
+    public ResponseEntity verifiedEmail(@PathVariable(value = "id") Integer idUser, @RequestBody TokenRecordDTO token){
+        Boolean verify = tokenVerifyService.verifyTokenEqualsDB(idUser, token.token());
+        if (verify){
+            return ResponseEntity.ok("Email verificado com sucesso!");
+        }
+        return ResponseEntity.badRequest().body("Token incorreto ou expirado");
     }
 
 
