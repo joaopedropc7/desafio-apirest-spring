@@ -4,6 +4,7 @@ import br.com.api.capyba.models.PostModel;
 import br.com.api.capyba.models.records.PostRecord;
 import br.com.api.capyba.service.BlogpotService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +18,9 @@ public class PostController {
     private BlogpotService postBlogService;
 
     @GetMapping
-    public List<PostModel> getAllPosts(){
-        return postBlogService.getAllPosts();
+    public Page<PostModel> findAll(@RequestParam(value = "page", defaultValue = "0")Integer page,
+                                   @RequestParam(value = "size", defaultValue = "10")Integer size){
+        return postBlogService.findAll();
     }
 
     @GetMapping("/{id}")
