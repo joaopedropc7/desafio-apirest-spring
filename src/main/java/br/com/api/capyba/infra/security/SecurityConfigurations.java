@@ -22,6 +22,14 @@ public class SecurityConfigurations {
     @Autowired
     private SecurityFilter securityFilter;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/authenticate/**",
+            "/swagger-resources/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/api/v1/app/user/auth/**"
+    };
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return  httpSecurity
@@ -32,6 +40,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "api/authentication/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/authentication/verified/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/email").permitAll()
+                        .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.getVerifiedEmail()"))
                 ).logout((logout) -> logout
                         .logoutSuccessUrl("/api/authentication/logout")
