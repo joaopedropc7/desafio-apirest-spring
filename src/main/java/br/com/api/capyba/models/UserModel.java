@@ -19,6 +19,7 @@ public class UserModel implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String login;
+    private String name;
     private String email;
     private String password;
     private Boolean verifiedEmail;
@@ -38,6 +39,7 @@ public class UserModel implements UserDetails {
     public UserModel(RegisterDTO data, String passwordEncrypted){
         this.login = data.login();
         this.email = data.email();
+        this.name = data.name();
         this.password = passwordEncrypted;
         this.verifiedEmail = false;
         this.number = data.number();
@@ -124,6 +126,14 @@ public class UserModel implements UserDetails {
 
     public void setRole(UserRole role) {
         this.role = role;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

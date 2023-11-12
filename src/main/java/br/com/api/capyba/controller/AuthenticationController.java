@@ -5,14 +5,12 @@ import br.com.api.capyba.infra.security.TokenService;
 import br.com.api.capyba.models.EmailModel;
 import br.com.api.capyba.models.UserModel;
 import br.com.api.capyba.models.enums.UserRole;
-import br.com.api.capyba.models.records.LoginDTO;
-import br.com.api.capyba.models.records.LoginResponseDTO;
-import br.com.api.capyba.models.records.RegisterDTO;
-import br.com.api.capyba.models.records.TokenRecordDTO;
+import br.com.api.capyba.models.records.*;
 import br.com.api.capyba.repositories.UserRepository;
 import br.com.api.capyba.service.AuthorizationService;
 import br.com.api.capyba.service.EmailService;
 import br.com.api.capyba.service.TokenVerifyService;
+import br.com.api.capyba.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.apache.catalina.User;
@@ -33,7 +31,8 @@ public class AuthenticationController {
 
     @Autowired
     private AuthorizationService authorizationService;
-
+    @Autowired
+    private UserService userService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -45,8 +44,9 @@ public class AuthenticationController {
     @Autowired
     private TokenVerifyService tokenVerifyService;
 
+
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody LoginDTO data){
+    public ResponseEntity login(@RequestBody LoginDTO data, HttpServletRequest request){
         UserModel user = repository.findByLoginModel(data.login());
         if(!user.getVerifiedEmail()){
             return ResponseEntity.badRequest().body("Email não verificado");
@@ -78,6 +78,18 @@ public class AuthenticationController {
         emailService.sendEmail(emailModel);
 
         return ResponseEntity.ok().build().ok("Usuário cadastrado com sucesso, Verifique seu email para confirmar o cadastro!");
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<UserModel> updateAccount(HttpServletRequest request,@RequestBody UpdateAccountDTO updateAccountDTO){
+        UserModel user = userService.updateAccount(updateAccountDTO, request);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @PutMapping("/update/password")
+    public ResponseEntity updatePassword(HttpServletRequest request,@RequestBody UpdatePasswordDTO updatePasswordDTO){
+        userService.updatePassword(updatePasswordDTO, request);
+        return ResponseEntity.ok().body("Senha alterada com sucesso!");
     }
 
     @PostMapping("/logout")

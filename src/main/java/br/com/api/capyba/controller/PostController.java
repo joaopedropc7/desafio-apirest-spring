@@ -3,6 +3,8 @@ package br.com.api.capyba.controller;
 import br.com.api.capyba.models.PostModel;
 import br.com.api.capyba.models.records.PostRecord;
 import br.com.api.capyba.service.BlogpotService;
+import br.com.api.capyba.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,14 @@ public class PostController {
 
     @Autowired
     private BlogpotService postBlogService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public Page<PostModel> findAll(@RequestParam(value = "page", defaultValue = "0")Integer page,
-                                   @RequestParam(value = "size", defaultValue = "10")Integer size){
+                                   @RequestParam(value = "size", defaultValue = "10")Integer size,
+                                   HttpServletRequest request){
+        userService.getIdUserByAuthentication(request);
         return postBlogService.findAll();
     }
 
