@@ -41,8 +41,11 @@ PUT api/posts/{id} - Atualiza um post pelo ID
 
 Delete /api/posts/{id} - Deleta um post pelo ID 
 
-POST /api/posts - Cadastra um post
+POST /api/posts/like/{id} - Curte um post
 
+POST /api/posts/unlike/{id} - Descurte um post
+
+POST /api/posts/search - Busca um post desta forma -> /api/posts/search?query={parametro}
 -----------------------------------------
 
 POST /api/authentication/login - Login
@@ -53,7 +56,7 @@ Put /api/authentication/uodate - Atualia a conta
 
 Put /api/authentication/uodate/password - Atualia a conta
 
-POST /api/authentication/verified/{id} - Verifica a conta fornecendo a conta
+POST /api/authentication/verified/{id} - Verifica a conta fornecendo o id da conta na url e passando como parâmetro no body o token enviado por email
 
 -----------------------------------------
 
