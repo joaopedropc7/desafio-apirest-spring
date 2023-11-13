@@ -40,6 +40,7 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.POST, "api/authentication/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/authentication/verified/{id}").permitAll()
                         .requestMatchers(HttpMethod.POST, "api/email").permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/terms").permitAll()
                         .requestMatchers(AUTH_WHITELIST).permitAll()
                         .anyRequest().access(new WebExpressionAuthorizationManager("isAuthenticated() and principal.getVerifiedEmail()"))
                 ).logout((logout) -> logout

@@ -8,7 +8,7 @@
 
 Este projeto usa Java, Spring, banco de dados PostgreSql e Spring Security com JWT! Também está documentada com o Swagger
 
-Esta api rest é um desafio, na qual consta com endpoint para login, registro, update de conta e senha, contém um CRUD de posts com a opcão de like e unlike, após o registro de conta é enviado um email para o email fornecido com o token para verificacão, este token se expira em 30 minutos para isto foi usado o SMTP do gmail e o Java Mail Sender.
+Esta api rest é um desafio, na qual consta com endpoint para login, registro, update de conta e senha, contém um CRUD de posts com a opcão de like e unlike, após o registro de conta é enviado um email para o email fornecido com o token para verificacão, este token se expira em 30 minutos para isto foi usado o SMTP do gmail e o Java Mail Sender, além disso, também conta com um endpoint que faz o download de um PDF com os termos de serviço.
 
 ## Instalação
 
@@ -54,6 +54,10 @@ Put /api/authentication/uodate - Atualia a conta
 Put /api/authentication/uodate/password - Atualia a conta
 
 POST /api/authentication/verified/{id} - Verifica a conta fornecendo a conta
+
+-----------------------------------------
+
+GET /api/terms - Download PDF com os termos de uso e políticas de privacidade(PDF)
 ```
 
 ## Authentication
