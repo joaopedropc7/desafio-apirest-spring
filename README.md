@@ -15,7 +15,7 @@ Esta api rest é um desafio, na qual consta com endpoint para login, registro, u
 1. Clone o repositório:
 
 ```bash
-git clone https://github.com/joaopedropc7/academia.git
+git clone https://github.com/joaopedropc7/desafio-apirest-spring.git
 ```
 
 2. Instale as dependências com o Maven
